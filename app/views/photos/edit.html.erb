@@ -1,0 +1,37 @@
+<%= form_for @photo, :url => photo_path(@photo), :method=>:patch do |f| %>
+<% if @photo.errors.any? %>
+<ul>
+  <% @photo.errors.full_messages.each do |msg| %>
+  <li>
+    <%= msg %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+<div class="form-froup">
+  <div>
+    <%= f.label :title, "主題" %>
+  </div>
+  <div>
+    <%= f.text_field :title, :placeholder =>"Topic name" ,:class=>"form-control form-width" %>
+  </div>
+</div>
+<div class="form-froup">
+  <div>
+    <%= image_tag(@photo.pic(:large)) %>
+  </div>
+  <div>
+    <%= check_box_tag "destroy_pic", "1" %>刪除檔案
+  </div>
+</div>
+<div class="form-froup">
+  <div>
+    <%= f.label :pic, "Upload pic" %>
+  </div>
+  <div>
+    <%= f.file_field :pic %>
+  </div>
+</div>
+<%= f.submit "Update photo",:class=>"btn btn-success" %>
+<% end %>
+<%= link_to "Back", photos_path %>

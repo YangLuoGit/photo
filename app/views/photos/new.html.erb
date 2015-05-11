@@ -1,0 +1,37 @@
+
+<%= form_for @photo, :url => photos_path do |f| %>
+<%#= render :partial => "form", :locals => { :f => f } %>
+<% if @photo.errors.any? %>
+<ul>
+  <% @photo.errors.full_messages.each do |msg| %>
+  <li>
+    <%= msg %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+<div class="form-froup">
+  <div>
+    <%= f.label :title, "主題" %>
+  </div>
+  <div>
+    <%= f.text_field :title, :placeholder =>"Topic name" ,:class=>"form-control form-width" %>
+  </div>
+  <div>
+    <%= f.label :description, "描述" %>
+  </div>
+  <div>
+    <%= f.text_area :description,:rows=>5, :placeholder =>"Write down your thought" ,:class=>"form-control form-width2" %>
+  </div>
+</div>
+<div class="form-froup">
+  <div>
+    <%= f.label :pic, "Upload pic" %>
+  </div>
+  <div>
+    <%= f.file_field :pic %>
+  </div>
+</div>
+<%= f.submit "Upload photo",:class=>"btn btn-success" %>
+<% end %>
+<%= link_to "Back", photos_path %>

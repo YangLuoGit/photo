@@ -1,0 +1,44 @@
+.h1 {
+  font-size: 15px;
+  font-weight: bold;
+}
+.form-width {
+  width:auto;
+}
+.form-width2 {
+  width:500px;
+}
+.form-width3{
+  width:500px;
+  margin:auto;
+}
+.Ptitle {
+  font-size: 22px;
+}
+.pic {
+  display: inline-block;
+}
+.button {
+  vertical-align: top;
+  display: inline-block;
+}
+.circle {
+  border-radius: 50%;
+}
+
+.display {
+  display:inline-block;
+  margin-left: 10px;
+}
+.text-right {
+  display: inline-block;
+}
+.contents {
+font-size: 22px;
+}
+.comment {
+  text-align: left;
+}
+.space{
+  height:10px;
+}

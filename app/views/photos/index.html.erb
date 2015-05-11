@@ -1,0 +1,148 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div>
+      </div>
+      <h1><%= current_user.try(:display_name) || "Guest" %>
+      </h1>
+      <% if current_user %>
+      <div class="text-right">
+        <div class="row display">
+          <%= link_to new_photo_path, :class=>"" do %>
+          <%= icon("") %><span class="h1">上傳照片</span>
+          <% end %>
+        </div>
+        <div class=""></div>
+        <div class="row display">
+          <%= link_to delete_all_photos_path,:data => {:confirm => "Empty all ?"},:class=>"", :method => :post do %>
+          <%= icon("") %><span class="h1">刪除全部</span>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+      <hr>
+      <div class="row">
+        <% @photos.each do |p| %>
+        <div class="text-center Ptitle">
+          <%= link_to p.title, photo_path(p),:class=>"Ptitle"%>
+        </div>
+        <div class="text-center frame">
+          <% if p.pic.exists? %>
+          <div class="">
+            <div class="button">
+              <div>
+                <%= image_tag( p.pic(:medium)) %>
+              </div>
+              <hr>
+              <div>
+                <div class="comment">
+                  <% if p.user.try(:fb_image) %>
+                  <div class="display comment">
+                    <%= image_tag(p.user.fb_image,:class => "img-circle" ) %>
+                  </div>
+                  <div class="contents display">
+                    <%= p.description %>
+                  </div>
+                  <hr>
+                  <% else %>
+                  <div class="label label-default display">
+                    <%= p.author_name %>
+                  </div>
+                  <div class="contents display">
+                    <%= p.description %>
+                  </div>
+                  <hr>
+                  <%end%>
+                </div>
+              </div>
+              <!-- 驗證是否為facebook登入 或是 devise登入 -->
+              <div class="comment">
+                <% p.comments.each do |c| %>
+                  <div id="comment-<%= c.id %>">
+                      <% if c.user.try(:fb_image) %>
+                      <div class="display">
+                        <%= image_tag(c.user.fb_image,:class => "img-circle" ) %>
+                      </div>
+                      <!-- <br> -->
+                      <% else %>
+                      <div class="label label-default display">
+                        <%= c.author_name %>
+                      </div>
+                      <% end %>
+                      <!-- 顯示comment內容及編輯刪除按鈕 -->
+                      <span class="contents">
+                        <%= c.contents %>
+                      </span>
+
+                      <% if current_user && c.user == current_user %>
+                        <div class="contents display">
+                          <span class="comment_btn"><%= link_to "#",:class => "" do %>
+                            <%= icon("") %>編輯
+                            <% end %>
+                          </span>
+                          <%= link_to photo_comment_path(p, c),:method => :delete, :data => {:confirm => "Are u sure?"}, :remote => true, :class => "" do %>
+                          <%= icon("") %>刪除
+                          <% end %>
+                        </div>
+                      <% end %>
+
+                      <div class="space"></div>
+                      <!-- 編輯comment欄位及按鈕 -->
+                                      
+                      <%= form_for [p, c] do |f| %>
+                      <div class="form-group mod_comment_form">
+                        <%= f.text_area :contents, :row => 3, :class => "form-control form-width3" %>
+                        <%= f.submit "Modify Comment", :class => "" %>
+                      </div>
+                     <% end %>
+                  </div>
+                <% end %>
+              </div>
+              
+              <% if current_user %>
+               <!-- 新建comment欄位 -->
+                <%= form_for @comment, :url => photo_comments_path(p) do |f|  %>
+                <div class="form-group text-center">
+                  <%= f.text_area :contents, :row => 3, :class => "" %>
+                </div>
+                <div class="form-group">
+                  <%= f.submit "Add comment",:class => "" %>
+                </div>
+                </div>
+                <% end %>
+              <% end %>
+
+            <% end %>
+
+            <% if p.can_edit_by_user?(current_user) %>
+
+            <div class="button">
+              <div class="text-left">
+                <%= link_to edit_photo_path(p),:class=>"" do %>
+                <%= icon("") %>編輯
+                <% end %>
+              </div>
+              <div class="text-left">
+                <%= link_to photo_path(p),:data => {:confirm => "Are you sure?"},:method => :delete,:class => "" do%>
+                <%= icon("") %>刪除
+                <% end %>
+              </div>
+              <% end %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+  var mod_comment_form = $(".mod_comment_form")
+  mod_comment_form.hide();
+  $(".comment_btn").click(function(e){
+  e.preventDefault();
+  var t = $(this).closest(".mod_comment_form")
+  // .child(".mod_comment_form");
+  // var f = $(tr).next().find(".mod_comment_form");
+  t.slideToggle();
+  });
+  </script>
